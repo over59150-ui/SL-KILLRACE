@@ -24,7 +24,11 @@ h2{font-size:23px;text-transform:uppercase;margin-bottom:12px;border-left:4px so
 <main>
 <section class="panel"><h2>Règles rapides</h2><p class="help">Inscris ton équipe de 4 joueurs. Un code privé sera généré automatiquement pour accéder à ton espace équipe et déposer les screenshots des games.</p><div class="rules"><div class="rule"><strong>Mode</strong><span>Warzone Resurgence public</span></div><div class="rule"><strong>Format</strong><span>Kill Race</span></div><div class="rule"><strong>Roster</strong><span>4 joueurs par équipe</span></div></div></section>
 <section class="panel"><h2>Inscrire une équipe</h2><form id="registerForm"><div class="grid-2"><div><label>Nom de l'équipe *</label><input id="teamName" required></div><div><label>Capitaine *</label><input id="captainName" required></div><div><label>Discord / contact *</label><input id="contact" required></div><div><label>Plateforme</label><input id="platform" placeholder="Battle.net, PSN, Xbox..."></div></div><div class="grid-4" style="margin-top:14px"><div><label>Joueur 1 *</label><input id="p1" required></div><div><label>Joueur 2 *</label><input id="p2" required></div><div><label>Joueur 3 *</label><input id="p3" required></div><div><label>Joueur 4 *</label><input id="p4" required></div></div><div style="margin-top:14px"><label>Note</label><textarea id="note" placeholder="Optionnel : dispo, remplaçant, info utile..."></textarea></div><div class="actions"><button id="registerBtn" type="submit">Valider l'inscription</button><button class="secondary" type="button" onclick="loadTeams()">Actualiser</button></div><div id="registerStatus" class="status">Connexion au serveur...</div></form></section>
-<section class="panel"><h2>Espace équipe - dépôt des screens</h2><p class="help">Entre le code privé reçu après l'inscription. Tu pourras déposer un screenshot avec les kills, placement et numéro de game.</p><div class="grid-2"><div><label>Code équipe</label><input id="teamCode" placeholder="Ex : KR-AB12CD"></div><div style="display:flex;align-items:end"><button onclick="loginTeam()" style="width:100%">Accéder</button></div></div><div id="teamSpace" style="display:none;margin-top:18px"><div class="status ok">Connecté : <strong id="spaceTeamName"></strong></div><form id="screenForm"><div class="grid-2" style="margin-top:14px"><div><label>Game n°</label><input id="gameNumber" type="number" min="1" value="1" required></div><div><label>Kills équipe</label><input id="kills" type="number" min="0" value="0" required></div><div><label>Placement</label><input id="placement" type="number" min="1" value="1" required></div><div><label>Screenshot *</label><input id="screenshot" type="file" accept="image/*" required></div></div><div style="margin-top:14px"><label>Commentaire</label><textarea id="screenNote" placeholder="Ex : game 2, record, bug lobby..."></textarea></div><div class="actions"><button id="screenBtn" type="submit">Envoyer le screen</button></div><div id="screenStatus" class="status">Aucun envoi pour le moment.</div></form><div id="mySubmissions"></div></div></section>
+<section class="panel"><h2>Espace équipe - dépôt des screens</h2><p class="help">Entre le code privé reçu après l'inscription. Tu pourras déposer un screenshot avec les kills, placement et numéro de game.</p><div class="grid-2"><div><label>Code équipe</label><input id="teamCode" placeholder="Ex : KR-AB12CD"></div><div style="display:flex;align-items:end"><button onclick="loginTeam()" style="width:100%">Accéder</button></div></div><div id="teamSpace" style="display:none;margin-top:18px"><div class="status ok">Connecté : <strong id="spaceTeamName"></strong></div><form id="screenForm"><div class="grid-2" style="margin-top:14px"><div><label>Game n°</label><input id="gameNumber" type="number" min="1" value="1" required></div><div><label>Kills équipe</label><input id="kills" type="number" min="0" value="0" required></div><div><label>Placement</label><input id="placement" type="number" min="1" value="1" required></div><div><label>Screen Top / Placement *</label>
+<input id="screenshotTop" type="file" accept="image/*" required>
+
+<label>Screen Scoreboard / Kills *</label>
+<input id="screenshotScoreboard" type="file" accept="image/*" required></div></div><div style="margin-top:14px"><label>Commentaire</label><textarea id="screenNote" placeholder="Ex : game 2, record, bug lobby..."></textarea></div><div class="actions"><button id="screenBtn" type="submit">Envoyer le screen</button></div><div id="screenStatus" class="status">Aucun envoi pour le moment.</div></form><div id="mySubmissions"></div></div></section>
 </main>
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbyHuwrkiKEAZHOO7JkQspXsV3XFkrjcvHmoVXpYWOGKKbSvPC2lRq3QPXP-p6DkEa_rqQ/exec";
@@ -108,10 +112,14 @@ $("screenForm").addEventListener("submit",async e=>{
   btn.disabled = true;
   try{
     if(!currentTeam)throw new Error("Connecte-toi à ton espace équipe.");
-    const file=$("screenshot").files[0];
-    if(!file)throw new Error("Ajoute un screenshot.");
+    const fileTop = $("screenshotTop").files[0];
+const fileScoreboard = $("screenshotScoreboard").files[0];
+
+if(!fileTop) throw new Error("Ajoute le screen Top / Placement.");
+if(!fileScoreboard) throw new Error("Ajoute le screen Scoreboard / Kills.");
     setBox("screenStatus","Envoi du screenshot...");
-    const fileData = await fileToBase64(file);
+    const fileDataTop = await fileToBase64(fileTop);
+const fileDataScoreboard = await fileToBase64(fileScoreboard);
     const sub={
   id:uid(),
   teamCode:currentTeam.code,
@@ -121,8 +129,10 @@ $("screenForm").addEventListener("submit",async e=>{
   kills:Number($("kills").value),
   placement:Number($("placement").value),
   note:$("screenNote").value.trim(),
-  fileData:fileData,
-  fileName:file.name
+  fileDataTop:fileDataTop,
+fileNameTop:fileTop.name,
+fileDataScoreboard:fileDataScoreboard,
+fileNameScoreboard:fileScoreboard.name
 };
     const data = await api("submitScreen",sub,"POST");
     state = data.state || state;
