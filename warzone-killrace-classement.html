@@ -14,7 +14,7 @@
 <section class="dashboard"><div class="panel" id="rankingPanel"><h2>Top équipes</h2><div style="overflow-x:auto"><table id="rankingTable"><thead><tr><th>#</th><th>Équipe</th><th>Roster</th><th>Score</th><th>Kills</th><th>Top 1</th><th>Games validées</th></tr></thead><tbody id="rankingBody"></tbody></table></div></div><div class="panel"><h2>Tchat en direct</h2><div class="chat-box"><div id="chatMessages" class="messages"><div class="empty">Chargement du tchat...</div></div><div><input id="chatName" maxlength="24" placeholder="Pseudo"></div><div><textarea id="chatText" maxlength="250" placeholder="Message..."></textarea></div><button onclick="sendChat()">Envoyer</button></div></div></section>
 </main>
 <script>
-const API_URL=""; // Colle ici l'URL Google Apps Script publiée.
+const API_URL="https://script.google.com/macros/s/AKfycbyHuwrkiKEAZHOO7JkQspXsV3XFkrjcvHmoVXpYWOGKKbSvPC2lRq3QPXP-p6DkEa_rqQ/exec"; // Colle ici l'URL Google Apps Script publiée.
 const LOCAL_KEY="wz_killrace_state_v1";
 let state={settings:{bestGames:3,killPoint:1,top1Bonus:15,top5Bonus:5},teams:[],submissions:[],chat:[]};
 const $=id=>document.getElementById(id);function escapeHtml(v){return String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
