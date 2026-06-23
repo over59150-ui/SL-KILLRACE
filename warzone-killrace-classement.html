@@ -26,8 +26,30 @@ function approved(){return (state.submissions||[]).filter(s=>s.status==="approve
 function scoreGame(s){let pts=(Number(s.kills)||0)*Number(state.settings.killPoint||1);if(Number(s.placement)===1)pts+=Number(state.settings.top1Bonus||0);else if(Number(s.placement)<=5)pts+=Number(state.settings.top5Bonus||0);return pts}
 function rankings(){return (state.teams||[]).map(t=>{const games=approved().filter(s=>s.teamId===t.id).map(s=>({...s,score:scoreGame(s)})).sort((a,b)=>b.score-a.score);const best=games.slice(0,Number(state.settings.bestGames||3));return {...t,validGames:games.length,score:best.reduce((a,g)=>a+g.score,0),kills:best.reduce((a,g)=>a+Number(g.kills||0),0),wins:best.filter(g=>Number(g.placement)===1).length}}).sort((a,b)=>b.score-a.score||b.kills-a.kills||b.wins-a.wins)}
 function render(){const rows=rankings();$("statTeams").textContent=(state.teams||[]).length;$("statScreens").textContent=approved().length;$("statBest").textContent=state.settings.bestGames||3;$("statKills").textContent=approved().reduce((a,s)=>a+Number(s.kills||0),0);$("rankingBody").innerHTML=rows.length?rows.map((t,i)=>`<tr><td>${i+1}</td><td><strong>${escapeHtml(t.name)}</strong><br><small style="color:var(--muted)">${escapeHtml(t.captain||"")}</small></td><td>${escapeHtml((t.players||[]).join(", "))}</td><td><strong>${t.score}</strong></td><td>${t.kills}</td><td>${t.wins}</td><td>${t.validGames}</td></tr>`).join(""):`<tr><td colspan="7"><div class="empty">Aucun classement pour le moment.</div></td></tr>`;renderChat()}
-function renderChat(){const chat=(state.chat||[]).slice(-60);$("chatMessages").innerHTML=chat.length?chat.map(m=>`<div class="msg"><strong>${escapeHtml(m.name)}</strong><small>${escapeHtml(m.createdAt)}</small><p>${escapeHtml(m.text)}</p></div>`).join(""):`<div class="empty">Aucun message pour le moment.</div>`;$("chatMessages").scrollTop=$("chatMessages").scrollHeight}
-async function sendChat(){try{const name=$("chatName").value.trim()||"Viewer";const text=$("chatText").value.trim();if(!text)return;await loadCloud();state.chat=state.chat||[];state.chat.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),name,text,createdAt:new Date().toLocaleString("fr-FR")});if(API_URL)await api("save",state);else saveLocal();$("chatText").value="";renderChat()}catch(e){alert(e.message)}}
+function renderChat(){const chat=(state.chat||[]).slice(-60);$("chatMessages").innerHTML=chat.length?chat.map(m=>`<div class="msg"><strong>${escapeHtml(m.author || m.name)}</strong><small>${escapeHtml(m.createdAt)}</small><p>${escapeHtml(m.text)}</p></div>`).join(""):`<div class="empty">Aucun message pour le moment.</div>`;$("chatMessages").scrollTop=$("chatMessages").scrollHeight}
+async function sendChat(){
+  try{
+    const author = $("chatName").value.trim() || "Viewer";
+    const text = $("chatText").value.trim();
+
+    if(!text) return;
+
+    const data = await api("sendChat",{
+      id: Date.now().toString(36)+Math.random().toString(36).slice(2),
+      author: author,
+      text: text
+    });
+
+    state = data.state || state;
+
+    $("chatText").value = "";
+
+    renderChat();
+
+  }catch(e){
+    alert(e.message);
+  }
+}
 function exportRankingImage(){const rows=rankings().slice(0,15);const w=1200,h=160+rows.length*54;const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.fillStyle="#07101b";x.fillRect(0,0,w,h);x.fillStyle="#00aaff";x.font="bold 42px Arial";x.fillText("WARZONE KILL RACE - CLASSEMENT",40,60);x.fillStyle="#9ca8b6";x.font="22px Arial";x.fillText("Export : "+new Date().toLocaleString("fr-FR"),40,96);x.fillStyle="#111722";x.fillRect(40,120,w-80,42);x.fillStyle="#00aaff";x.font="bold 18px Arial";x.fillText("#",60,148);x.fillText("Équipe",120,148);x.fillText("Score",620,148);x.fillText("Kills",760,148);x.fillText("Top 1",900,148);x.fillText("Games",1040,148);rows.forEach((r,i)=>{const y=180+i*54;x.fillStyle=i===0?"#0f2a25":"#0b1420";x.fillRect(40,y-32,w-80,44);x.fillStyle="#e8edf2";x.font="bold 20px Arial";x.fillText(String(i+1),60,y-4);x.fillText(r.name,120,y-4);x.fillText(String(r.score),620,y-4);x.fillText(String(r.kills),760,y-4);x.fillText(String(r.wins),900,y-4);x.fillText(String(r.validGames),1040,y-4)});const a=document.createElement("a");a.download="classement-warzone-killrace.png";a.href=c.toDataURL("image/png");a.click()}
 document.addEventListener("DOMContentLoaded",()=>{loadCloud();setInterval(loadCloud,5000)});
 </script>
