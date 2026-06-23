@@ -111,12 +111,19 @@ $("screenForm").addEventListener("submit",async e=>{
     const file=$("screenshot").files[0];
     if(!file)throw new Error("Ajoute un screenshot.");
     setBox("screenStatus","Envoi du screenshot...");
-    const imageData=await fileToBase64(file);
+    const fileData = await fileToBase64(file);
     const sub={
-      id:uid(),teamCode:currentTeam.code,teamId:currentTeam.id,teamName:currentTeam.name,
-      game:Number($("gameNumber").value),kills:Number($("kills").value),placement:Number($("placement").value),
-      note:$("screenNote").value.trim(),imageData:imageData,fileName:file.name,status:"pending",createdAt:new Date().toLocaleString("fr-FR")
-    };
+  id:uid(),
+  teamCode:currentTeam.code,
+  teamId:currentTeam.id,
+  teamName:currentTeam.name,
+  game:Number($("gameNumber").value),
+  kills:Number($("kills").value),
+  placement:Number($("placement").value),
+  note:$("screenNote").value.trim(),
+  fileData:fileData,
+  fileName:file.name
+};
     const data = await api("submitScreen",sub,"POST");
     state = data.state || state;
     $("screenForm").reset();$("gameNumber").value=1;$("kills").value=0;$("placement").value=1;
