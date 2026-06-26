@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SILENT LEGION - Test Double Joystick</title>
+
+  <style>
+    :root {
+      --bg: #05070c;
+      --panel: #111722;
+      --blue: #00aaff;
+      --green: #35ff9b;
+      --red: #ff4d4d;
+      --text: #e8edf2;
+      --muted: #9ca8b6;
+      --border: rgba(0, 170, 255, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(0, 170, 255, 0.18), transparent 35%),
+        linear-gradient(135deg, #05070c, #101722, #05070c);
+      color: var(--text);
+      padding: 30px;
+    }
+
+    .app {
+      width: min(1200px, 100%);
+      margin: auto;
+      background: linear-gradient(145deg, rgba(17, 23, 34, 0.95), rgba(5, 7, 12, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 0 40px rgba(0, 170, 255, 0.12);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .brand small {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-weight: bold;
+      font-size: 11px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    h1 span {
+      color: var(--blue);
+      text-shadow: 0 0 18px rgba(0, 170, 255, 0.8);
+    }
+
+    .status {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--muted);
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 12px;
+      max-width: 420px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .status.connected {
+      color: var(--green);
+      border-color: rgba(53, 255, 155, 0.45);
+      background: rgba(53, 255, 155, 0.08);
+    }
+
+    .tool-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0, 170, 255, 0.1);
+      color: var(--blue);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      background: rgba(0, 170, 255, 0.18);
+      color: var(--text);
+    }
+
+    .intro {
+      color: var(--muted);
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .sticks-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .panel {
+      background: rgba(7, 11, 18, 0.75);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .panel h2 {
+      font-size: 20px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--blue);
+      padding-left: 12px;
+    }
+
+    .help {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .stick-zone {
+      width: 280px;
+      height: 280px;
+      max-width: 100%;
+      aspect-ratio: 1 / 1;
+      margin: 20px auto;
+      border-radius: 50%;
+      border: 2px solid rgba(0, 170, 255, 0.55);
+      position: relative;
+      background:
+        radial-gradient(circle, rgba(0, 170, 255, 0.14), transparent 60%),
+        #05070c;
+      box-shadow: inset 0 0 30px rgba(0, 170, 255, 0.12);
+      overflow: hidden;
+    }
+
+    .axis-line-x,
+    .axis-line-y {
+      position: absolute;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .axis-line-x {
+      width: 100%;
+      height: 1px;
+      top: 50%;
+      left: 0;
+    }
+
+    .axis-line-y {
+      width: 1px;
+      height: 100%;
+      top: 0;
+      left: 50%;
+    }
+
+    .deadzone-circle {
+      position: absolute;
+      border: 1px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--blue);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 18px rgba(0, 170, 255, 1);
+    }
+
+    .dot.right {
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(53, 255, 155, 1);
+    }
+
+    .values {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .value {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 14px;
+      border-radius: 12px;
+    }
+
+    .value small {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .value strong {
+      display: block;
+      font-size: 22px;
+      color: var(--blue);
+      margin-top: 5px;
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .result-box {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      font-weight: bold;
+      line-height: 1.4;
+    }
+
+    .ok {
+      color: var(--green);
+    }
+
+    .bad {
+      color: var(--red);
+    }
+
+    .neutral {
+      color: var(--muted);
+    }
+
+    button {
+      background: var(--blue);
+      color: #02050a;
+      border: none;
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-weight: 900;
+      cursor: pointer;
+      text-transform: uppercase;
+      margin-top: 14px;
+    }
+
+    button:hover {
+      background: #36c3ff;
+    }
+
+    footer {
+      margin-top: 25px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .sticks-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stick-zone {
+        width: 240px;
+        height: 240px;
+      }
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding: 15px;
+      }
+
+      .app {
+        padding: 20px;
+      }
+
+      .values {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+    <header>
+      <div class="brand">
+        <small>Controller Diagnostic Tool</small>
+        <h1>Silent <span>Legion</span></h1>
+      </div>
+
+      <div class="tool-actions">
+        <a class="back-link" href="warzone-killrace-inscription.html">← Retour inscription</a>
+        <div id="connectionStatus" class="status">Manette non détectée</div>
+      </div>
+    </header>
+
+    <p class="intro">
+      Branche ta manette, appuie sur un bouton, puis bouge les deux joysticks.
+      Cet outil lit les axes de ta manette pour tester le drift et régler les deadzones.
+    </p>
+
+    <div class="sticks-grid">
+
+      <!-- JOYSTICK GAUCHE -->
+      <section class="panel">
+        <h2>Joystick gauche</h2>
+        <p class="help">
+          Généralement utilisé pour les déplacements. Axes lus : 0 et 1.
+        </p>
+
+        <div class="stick-zone">
+          <div class="axis-line-x"></div>
+          <div class="axis-line-y"></div>
+          <div class="deadzone-circle" id="leftDeadzoneCircle"></div>
+          <div class="dot" id="leftDot"></div>
+        </div>
+
+        <div>
+          <label for="leftDeadzone">
+            Deadzone gauche : <span id="leftDeadzoneValue">0.08</span>
+          </label>
+          <input id="leftDeadzone" type="range" min="0" max="0.30" step="0.01" value="0.08">
+        </div>
+
+        <button onclick="calibrateLeft()">Calibrer joystick gauche</button>
+
+        <div class="values">
+          <div class="value">
+            <small>Axe X</small>
+            <strong id="leftXValue">0.000</strong>
+          </div>
+
+          <div class="value">
+            <small>Axe Y</small>
+            <strong id="leftYValue">0.000</strong>
+          </div>
+
+          <div class="value">
+            <small>Intensité</small>
+            <strong id="leftMagnitudeValue">0.000</strong>
+          </div>
+        </div>
+
+        <div id="leftAnalysis" class="result-box neutral">
+          En attente de la manette...
+        </div>
+      </section>
+
+      <!-- JOYSTICK DROIT -->
+      <section class="panel">
+        <h2>Joystick droit</h2>
+        <p class="help">
+          Généralement utilisé pour la caméra / visée. Axes lus : 2 et 3.
+        </p>
+
+        <div class="stick-zone">
+          <div class="axis-line-x"></div>
+          <div class="axis-line-y"></div>
+          <div class="deadzone-circle" id="rightDeadzoneCircle"></div>
+          <div class="dot right" id="rightDot"></div>
+        </div>
+
+        <div>
+          <label for="rightDeadzone">
+            Deadzone droite : <span id="rightDeadzoneValue">0.08</span>
+          </label>
+          <input id="rightDeadzone" type="range" min="0" max="0.30" step="0.01" value="0.08">
+        </div>
+
+        <button onclick="calibrateRight()">Calibrer joystick droit</button>
+
+        <div class="values">
+          <div class="value">
+            <small>Axe X</small>
+            <strong id="rightXValue">0.000</strong>
+          </div>
+
+          <div class="value">
+            <small>Axe Y</small>
+            <strong id="rightYValue">0.000</strong>
+          </div>
+
+          <div class="value">
+            <small>Intensité</small>
+            <strong id="rightMagnitudeValue">0.000</strong>
+          </div>
+        </div>
+
+        <div id="rightAnalysis" class="result-box neutral">
+          En attente de la manette...
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      Cette page lit seulement les mouvements de la manette. Elle ne contrôle pas la manette et n’envoie aucun input au jeu.
+    </footer>
+  </div>
+
+  <script>
+    const statusEl = document.getElementById("connectionStatus");
+
+    const leftDot = document.getElementById("leftDot");
+    const rightDot = document.getElementById("rightDot");
+
+    const leftXValue = document.getElementById("leftXValue");
+    const leftYValue = document.getElementById("leftYValue");
+    const leftMagnitudeValue = document.getElementById("leftMagnitudeValue");
+    const leftAnalysis = document.getElementById("leftAnalysis");
+
+    const rightXValue = document.getElementById("rightXValue");
+    const rightYValue = document.getElementById("rightYValue");
+    const rightMagnitudeValue = document.getElementById("rightMagnitudeValue");
+    const rightAnalysis = document.getElementById("rightAnalysis");
+
+    const leftDeadzoneInput = document.getElementById("leftDeadzone");
+    const rightDeadzoneInput = document.getElementById("rightDeadzone");
+
+    const leftDeadzoneValue = document.getElementById("leftDeadzoneValue");
+    const rightDeadzoneValue = document.getElementById("rightDeadzoneValue");
+
+    const leftDeadzoneCircle = document.getElementById("leftDeadzoneCircle");
+    const rightDeadzoneCircle = document.getElementById("rightDeadzoneCircle");
+
+    let leftCenterOffsetX = 0;
+    let leftCenterOffsetY = 0;
+    let rightCenterOffsetX = 0;
+    let rightCenterOffsetY = 0;
+
+    let lastLeftRawX = 0;
+    let lastLeftRawY = 0;
+    let lastRightRawX = 0;
+    let lastRightRawY = 0;
+
+    function getGamepad() {
+      const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+      return Array.from(gamepads).find(pad => pad);
+    }
+
+    function calibrateLeft() {
+      leftCenterOffsetX = lastLeftRawX;
+      leftCenterOffsetY = lastLeftRawY;
+      alert("Joystick gauche calibré avec sa position actuelle.");
+    }
+
+    function calibrateRight() {
+      rightCenterOffsetX = lastRightRawX;
+      rightCenterOffsetY = lastRightRawY;
+      alert("Joystick droit calibré avec sa position actuelle.");
+    }
+
+    function updateDeadzoneCircle(input, circle, valueLabel) {
+      const deadzone = Number(input.value);
+      const zoneSize = 280 * deadzone;
+
+      circle.style.width = `${zoneSize}px`;
+      circle.style.height = `${zoneSize}px`;
+      valueLabel.textContent = deadzone.toFixed(2);
+    }
+
+    function updateStick(dot, x, y) {
+      const maxMove = 120;
+
+      const dotX = Math.max(-1, Math.min(1, x)) * maxMove;
+      const dotY = Math.max(-1, Math.min(1, y)) * maxMove;
+
+      dot.style.left = `calc(50% + ${dotX}px)`;
+      dot.style.top = `calc(50% + ${dotY}px)`;
+    }
+
+    function analyzeStick(magnitude, deadzone, analysisElement, stickName) {
+      if (magnitude < deadzone) {
+        analysisElement.textContent = `${stickName} OK : le joystick est dans la deadzone. Aucun drift important détecté.`;
+        analysisElement.className = "result-box ok";
+      } else if (magnitude < deadzone + 0.05) {
+        analysisElement.textContent = `${stickName} : léger mouvement détecté. Augmente un peu la deadzone si ça bouge tout seul en jeu.`;
+        analysisElement.className = "result-box neutral";
+      } else {
+        analysisElement.textContent = `${stickName} : mouvement important détecté. Le joystick est incliné ou il y a un drift fort.`;
+        analysisElement.className = "result-box bad";
+      }
+    }
+
+    function update() {
+      const pad = getGamepad();
+
+      if (!pad) {
+        statusEl.textContent = "Manette non détectée";
+        statusEl.classList.remove("connected");
+
+        leftAnalysis.textContent = "Appuie sur un bouton de ta manette pour l’activer.";
+        leftAnalysis.className = "result-box neutral";
+
+        rightAnalysis.textContent = "Appuie sur un bouton de ta manette pour l’activer.";
+        rightAnalysis.className = "result-box neutral";
+
+        requestAnimationFrame(update);
+        return;
+      }
+
+      statusEl.textContent = pad.id;
+      statusEl.classList.add("connected");
+
+      /*
+        Mapping courant :
+        axes[0] = joystick gauche X
+        axes[1] = joystick gauche Y
+        axes[2] = joystick droit X
+        axes[3] = joystick droit Y
+
+        Certaines manettes peuvent avoir un mapping différent selon le navigateur.
+      */
+
+      lastLeftRawX = pad.axes[0] || 0;
+      lastLeftRawY = pad.axes[1] || 0;
+      lastRightRawX = pad.axes[2] || 0;
+      lastRightRawY = pad.axes[3] || 0;
+
+      const leftX = lastLeftRawX - leftCenterOffsetX;
+      const leftY = lastLeftRawY - leftCenterOffsetY;
+      const rightX = lastRightRawX - rightCenterOffsetX;
+      const rightY = lastRightRawY - rightCenterOffsetY;
+
+      const leftMagnitude = Math.sqrt(leftX * leftX + leftY * leftY);
+      const rightMagnitude = Math.sqrt(rightX * rightX + rightY * rightY);
+
+      const leftDeadzone = Number(leftDeadzoneInput.value);
+      const rightDeadzone = Number(rightDeadzoneInput.value);
+
+      leftXValue.textContent = leftX.toFixed(3);
+      leftYValue.textContent = leftY.toFixed(3);
+      leftMagnitudeValue.textContent = leftMagnitude.toFixed(3);
+
+      rightXValue.textContent = rightX.toFixed(3);
+      rightYValue.textContent = rightY.toFixed(3);
+      rightMagnitudeValue.textContent = rightMagnitude.toFixed(3);
+
+      updateStick(leftDot, leftX, leftY);
+      updateStick(rightDot, rightX, rightY);
+
+      analyzeStick(leftMagnitude, leftDeadzone, leftAnalysis, "Joystick gauche");
+      analyzeStick(rightMagnitude, rightDeadzone, rightAnalysis, "Joystick droit");
+
+      requestAnimationFrame(update);
+    }
+
+    leftDeadzoneInput.addEventListener("input", () => {
+      updateDeadzoneCircle(leftDeadzoneInput, leftDeadzoneCircle, leftDeadzoneValue);
+    });
+
+    rightDeadzoneInput.addEventListener("input", () => {
+      updateDeadzoneCircle(rightDeadzoneInput, rightDeadzoneCircle, rightDeadzoneValue);
+    });
+
+    window.addEventListener("gamepadconnected", () => {
+      statusEl.textContent = "Manette connectée";
+      statusEl.classList.add("connected");
+    });
+
+    window.addEventListener("gamepaddisconnected", () => {
+      statusEl.textContent = "Manette déconnectée";
+      statusEl.classList.remove("connected");
+    });
+
+    updateDeadzoneCircle(leftDeadzoneInput, leftDeadzoneCircle, leftDeadzoneValue);
+    updateDeadzoneCircle(rightDeadzoneInput, rightDeadzoneCircle, rightDeadzoneValue);
+
+    update();
+  </script>
+
+</body>
+</html>
