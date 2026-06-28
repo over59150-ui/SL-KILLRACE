@@ -5,42 +5,559 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Warzone Kill Race - Inscription</title>
 <style>
-:root{--bg:#05070c;--panel:#111722;--text:#e8edf2;--muted:#9ca8b6;--blue:#00aaff;--blue2:#36c3ff;--success:#33ff99;--danger:#ff4d4d;--warning:#ffd166;--border:rgba(0,170,255,.28)}*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}body{min-height:100vh;color:var(--text);background:radial-gradient(circle at top left,rgba(0,170,255,.18),transparent 35%),linear-gradient(135deg,#05070c,#101722 45%,#05070c)}body:before{content:"";position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:36px 36px}header{padding:28px 6%;border-bottom:1px solid var(--border);background:rgba(5,7,12,.9)}.header-row{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}.brand small{color:var(--blue);text-transform:uppercase;letter-spacing:4px;font-weight:bold;font-size:11px}.brand h1{font-size:clamp(30px,5vw,54px);text-transform:uppercase;letter-spacing:-2px}.brand h1 span{color:var(--blue);text-shadow:0 0 18px rgba(0,170,255,.85)}.badge,.linkbtn{border:1px solid var(--border);color:var(--blue);padding:10px 14px;border-radius:999px;font-weight:bold;background:rgba(0,170,255,.08);text-transform:uppercase;font-size:12px;letter-spacing:1px;text-decoration:none}.top-actions{display:flex;gap:10px;flex-wrap:wrap}.page-layout{width:min(1000px,94%);margin:30px auto 70px}main{width:100%;margin:0;display:grid;gap:22px}.panel{background:linear-gradient(145deg,rgba(17,23,34,.96),rgba(8,12,18,.96));border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:0 0 35px rgba(0,170,255,.08)}h2{font-size:23px;text-transform:uppercase;margin-bottom:12px;border-left:4px solid var(--blue);padding-left:12px}.help{color:var(--muted);font-size:14px;line-height:1.55;margin-bottom:18px}.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.rule{padding:16px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08)}.rule strong{color:var(--blue);display:block;margin-bottom:6px}.rule span{color:var(--muted);font-size:13px}.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;font-weight:bold}input,textarea{width:100%;background:#070b12;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:13px 14px;border-radius:10px;outline:none}input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,170,255,.13)}textarea{min-height:92px;resize:vertical}button{border:0;background:var(--blue);color:#02050a;padding:14px 18px;border-radius:10px;font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:.8px}button:hover{background:var(--blue2)}button.secondary{background:transparent;border:1px solid rgba(255,255,255,.18);color:var(--text)}button:disabled{opacity:.45;cursor:not-allowed}button.loading{position:relative;opacity:.75}button.loading:after{content:"";display:inline-block;width:13px;height:13px;margin-left:9px;border:2px solid rgba(2,5,10,.35);border-top-color:#02050a;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.status{margin-top:16px;padding:14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--muted);white-space:pre-wrap}.ok{color:var(--success);border-color:rgba(51,255,153,.35);background:rgba(51,255,153,.08)}.error{color:#ffb3b3;border-color:rgba(255,77,77,.35);background:rgba(255,77,77,.08)}.warning{color:#ffe2a0;border-color:rgba(255,209,102,.35);background:rgba(255,209,102,.08)}.codebox{font-size:24px;color:var(--success);font-weight:900;letter-spacing:2px}.submission{padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.25);margin-top:10px}.submission small{color:var(--muted)}.player-kills{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.player-kill{padding:10px;border-radius:12px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.08)}.totalbox{margin-top:10px;padding:12px;border-radius:12px;background:rgba(0,170,255,.08);border:1px solid var(--border);font-weight:900;color:var(--blue)}.quick-actions{display:grid;grid-template-columns:1.08fr .92fr;gap:16px}.ranking-cta-button{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;min-height:118px;padding:24px 28px;color:var(--text);text-decoration:none;border-radius:18px;border:1px solid rgba(0,170,255,.55);background:radial-gradient(circle at top left,rgba(54,195,255,.26),transparent 42%),linear-gradient(135deg,rgba(0,170,255,.16),rgba(0,0,0,.18));box-shadow:0 0 42px rgba(0,170,255,.20),inset 0 0 24px rgba(0,170,255,.08);transition:.18s ease;overflow:hidden}.ranking-cta-left{display:flex;align-items:center;gap:18px}.ranking-cta-icon{display:grid;place-items:center;min-width:62px;height:62px;border-radius:18px;background:var(--blue);color:#02050a;font-size:32px;box-shadow:0 0 30px rgba(0,170,255,.55)}.ranking-cta-text small{display:block;color:var(--success);font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:900;margin-bottom:5px}.ranking-cta-text strong{display:block;color:#fff;font-size:clamp(24px,4vw,38px);text-transform:uppercase;line-height:1;text-shadow:0 0 18px rgba(0,170,255,.65)}.ranking-cta-text span{display:block;color:var(--muted);font-size:14px;margin-top:8px}.ranking-cta-arrow{display:grid;place-items:center;min-width:54px;height:54px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:var(--blue2);font-size:30px;font-weight:900}.ranking-cta-button:hover{transform:translateY(-2px);background:radial-gradient(circle at top left,rgba(54,195,255,.36),transparent 42%),linear-gradient(135deg,rgba(0,170,255,.24),rgba(0,0,0,.18));box-shadow:0 0 56px rgba(0,170,255,.34),inset 0 0 28px rgba(0,170,255,.12)}.controller-cta{border-color:rgba(53,255,155,.45);background:radial-gradient(circle at top left,rgba(53,255,155,.22),transparent 42%),linear-gradient(135deg,rgba(0,170,255,.10),rgba(0,0,0,.18))}.controller-cta .ranking-cta-icon{background:var(--success);box-shadow:0 0 30px rgba(53,255,155,.45)}.controller-cta .ranking-cta-text small{color:var(--blue2)}.controller-cta:hover{background:radial-gradient(circle at top left,rgba(53,255,155,.32),transparent 42%),linear-gradient(135deg,rgba(0,170,255,.16),rgba(0,0,0,.18));box-shadow:0 0 56px rgba(53,255,155,.20),inset 0 0 28px rgba(53,255,155,.10)}@media(max-width:850px){.grid-4,.grid-2,.rules,.player-kills,.quick-actions{grid-template-columns:1fr}.ranking-cta-button{align-items:flex-start;flex-direction:column}.ranking-cta-arrow{align-self:flex-end}}
+
+/* =========================================================
+   DESIGN ESPORT ARENA - Silent Legion
+   Refonte visuelle uniquement : IDs, formulaires et scripts conservés.
+   ========================================================= */
+:root{
+  --bg:#07050b;
+  --panel:#141019;
+  --panel-2:#1d1426;
+  --panel-3:#09080f;
+  --text:#f7f2ea;
+  --muted:#b8adbf;
+  --blue:#ffb000;
+  --blue2:#ff3d00;
+  --success:#19f28f;
+  --danger:#ff2e67;
+  --warning:#ffd166;
+  --border:rgba(255,176,0,.28);
+  --purple:#8c52ff;
+  --discord:#5865f2;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% -8%,rgba(255,61,0,.36),transparent 32%),
+    radial-gradient(circle at 88% 4%,rgba(140,82,255,.30),transparent 28%),
+    radial-gradient(circle at 50% 118%,rgba(255,176,0,.16),transparent 33%),
+    linear-gradient(135deg,#060409,#100918 44%,#050409 100%);
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(135deg,rgba(255,176,0,.055) 0 1px,transparent 1px 18px);
+  background-size:44px 44px,44px 44px,36px 36px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),rgba(0,0,0,.22));
+}
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background:linear-gradient(90deg,rgba(255,61,0,.10),transparent 22%,transparent 78%,rgba(140,82,255,.10));
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:40;
+  padding:24px 6%;
+  background:linear-gradient(90deg,rgba(9,7,13,.96),rgba(25,12,18,.94),rgba(10,7,17,.96));
+  border-bottom:1px solid var(--border);
+  box-shadow:0 18px 55px rgba(0,0,0,.38);
+}
+.header-row, header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.header-row{width:100%}
+.brand small{
+  color:var(--blue);
+  text-transform:uppercase;
+  letter-spacing:4px;
+  font-weight:900;
+  font-size:11px;
+}
+.brand h1,h1{
+  margin-top:4px;
+  font-size:clamp(32px,5vw,58px);
+  line-height:.94;
+  text-transform:uppercase;
+  letter-spacing:-2px;
+  color:var(--text);
+  text-shadow:0 0 28px rgba(255,61,0,.28);
+}
+.brand h1 span,h1 span{
+  color:var(--blue);
+  text-shadow:0 0 18px rgba(255,176,0,.74),0 0 36px rgba(255,61,0,.34);
+}
+.top-actions,.tool-actions,.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+main,.page-layout{
+  width:min(1280px,94%);
+  margin:30px auto 72px;
+}
+main{display:grid;gap:22px}
+.page-layout main{width:100%;margin:0;display:grid;gap:22px}
+.app{
+  width:min(1220px,94%);
+  margin:30px auto 72px;
+  padding:26px;
+  border:1px solid var(--border);
+  border-radius:28px 6px 28px 6px;
+  background:linear-gradient(145deg,rgba(20,16,25,.94),rgba(8,7,12,.96));
+  box-shadow:0 0 0 1px rgba(255,255,255,.035),0 28px 90px rgba(0,0,0,.48),0 0 70px rgba(255,61,0,.10);
+}
+.panel,.stat,.card,.value,.submission,.msg,.player-kill,.planning-item,.planning-preview-item,.rule{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018)),
+    linear-gradient(135deg,rgba(20,16,25,.96),rgba(9,8,14,.96));
+  border:1px solid rgba(255,176,0,.22);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.035),0 16px 42px rgba(0,0,0,.30);
+}
+.panel{
+  position:relative;
+  padding:24px;
+  border-radius:6px 24px 6px 24px;
+}
+.panel:before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:72px;
+  height:3px;
+  background:linear-gradient(90deg,var(--blue2),var(--blue),transparent);
+  box-shadow:0 0 20px rgba(255,176,0,.52);
+}
+h2{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:14px;
+  font-size:clamp(20px,3vw,28px);
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:var(--text);
+}
+h2:before{
+  content:"";
+  display:inline-block;
+  width:12px;
+  height:28px;
+  transform:skew(-18deg);
+  background:linear-gradient(180deg,var(--blue),var(--blue2));
+  box-shadow:0 0 18px rgba(255,176,0,.45);
+}
+.help,.intro,#syncStatus,.muted{
+  color:var(--muted);
+  line-height:1.58;
+}
+.help{font-size:14px;margin-bottom:18px}
+.intro{margin-bottom:25px;font-size:15px}
+.badge,.linkbtn,a.linkbtn,.back-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:10px 2px 10px 2px;
+  border:1px solid rgba(255,176,0,.34);
+  background:linear-gradient(135deg,rgba(255,176,0,.12),rgba(255,61,0,.07));
+  color:var(--text);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  font-size:12px;
+  text-decoration:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.badge{color:var(--blue)}
+.linkbtn:hover,.back-link:hover{
+  transform:translateY(-1px);
+  border-color:rgba(255,176,0,.7);
+  box-shadow:0 10px 28px rgba(255,61,0,.15);
+}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dashboard{display:grid;grid-template-columns:1.15fr .85fr;gap:22px}
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:14px;
+}
+.stat{
+  position:relative;
+  overflow:hidden;
+  padding:17px;
+  border-radius:6px 18px 6px 18px;
+}
+.stat:after{
+  content:"";
+  position:absolute;
+  inset:auto -20px -30px auto;
+  width:90px;
+  height:90px;
+  background:radial-gradient(circle,rgba(255,176,0,.20),transparent 65%);
+}
+.stat small,.value small{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  font-weight:900;
+  font-size:11px;
+}
+.stat strong,.value strong{
+  display:block;
+  margin-top:6px;
+  color:var(--blue);
+  font-size:clamp(25px,4vw,34px);
+  letter-spacing:-1px;
+}
+label{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:900;
+  margin-bottom:7px;
+}
+input,textarea,select{
+  width:100%;
+  background:#07060c;
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--text);
+  padding:13px 14px;
+  border-radius:4px 14px 4px 14px;
+  outline:none;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(255,176,0,.14),0 0 22px rgba(255,176,0,.08);
+}
+input[type="file"]{padding:12px;background:#09070e}
+input[type="range"]{accent-color:var(--blue);cursor:pointer}
+textarea{min-height:92px;resize:vertical}
+button{
+  border:0;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:#130a04;
+  padding:13px 16px;
+  border-radius:4px 14px 4px 14px;
+  font-weight:950;
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  box-shadow:0 14px 32px rgba(255,61,0,.18),inset 0 0 0 1px rgba(255,255,255,.18);
+}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.3);transform:none}
+button.secondary{
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.18);
+  color:var(--text);
+  box-shadow:none;
+}
+button.danger{background:rgba(255,46,103,.15);border:1px solid rgba(255,46,103,.55);color:#ffd5df;box-shadow:none}
+button.success{background:rgba(25,242,143,.16);border:1px solid rgba(25,242,143,.45);color:#c8ffe2;box-shadow:none}
+button.small{padding:8px 10px;font-size:11px;border-radius:4px 10px 4px 10px}
+button.loading{position:relative;opacity:.78}
+button.loading:after{
+  content:"";
+  display:inline-block;
+  width:13px;
+  height:13px;
+  margin-left:9px;
+  border:2px solid rgba(19,10,4,.35);
+  border-top-color:#130a04;
+  border-radius:50%;
+  vertical-align:-2px;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status,.statusbox,.result-box,.empty,.totalbox{
+  margin-top:14px;
+  padding:14px;
+  border-radius:4px 16px 4px 16px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.045);
+  color:var(--muted);
+  white-space:pre-wrap;
+}
+.ok{color:#bffff0!important;border-color:rgba(25,242,143,.42)!important;background:rgba(25,242,143,.08)!important}
+.error,.bad{color:#ffd1dc!important;border-color:rgba(255,46,103,.42)!important;background:rgba(255,46,103,.10)!important}
+.warning{color:#ffe8ad!important;border-color:rgba(255,209,102,.46)!important;background:rgba(255,209,102,.09)!important}
+.neutral{color:var(--muted)}
+.official-note{border-color:rgba(25,242,143,.38);background:rgba(25,242,143,.06);color:#c8ffe2}
+.code,.codebox{font-family:monospace;color:var(--success);font-weight:950;letter-spacing:2px}
+.codebox{font-size:24px}
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border-radius:4px 18px 4px 18px;
+  border:1px solid rgba(255,176,0,.18);
+}
+th,td{
+  padding:13px;
+  text-align:left;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  vertical-align:top;
+}
+th{
+  color:var(--blue);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-size:12px;
+  background:rgba(255,176,0,.08);
+}
+td{background:rgba(9,8,14,.64)}
+tr:first-child td{background:linear-gradient(90deg,rgba(255,176,0,.12),rgba(255,61,0,.06))}
+.pill{
+  display:inline-flex;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+.pending{color:#201400;background:var(--warning)}
+.approved{color:#021008;background:var(--success)}
+.rejected{color:#fff;background:rgba(255,46,103,.78)}
+.cards,.audit,.messages,.chat-box{display:grid;gap:12px}
+.card,.submission,.chat-msg,.msg{
+  border-radius:4px 16px 4px 16px;
+  padding:14px;
+}
+.chat-msg{display:grid;grid-template-columns:1fr auto;align-items:center;margin-top:10px}
+.chat-msg strong,.msg strong,.rule strong,.planning-item strong,.planning-preview-item strong{color:var(--blue)}
+.chat-msg p,.msg p{margin-top:5px;overflow-wrap:anywhere}
+.messages{max-height:420px;overflow:auto;padding:12px;border-radius:4px 18px 4px 18px;background:rgba(0,0,0,.23);border:1px solid rgba(255,255,255,.08)}
+.audit{max-height:360px;overflow:auto}
+.audit-line{font-size:13px;color:var(--muted);padding:9px;border-radius:4px 12px 4px 12px;background:rgba(255,255,255,.045)}
+.rules,.planning-grid,.planning-preview-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.rule,.planning-item,.planning-preview-item{padding:16px;border-radius:4px 16px 4px 16px}
+.rule strong,.planning-item strong,.planning-preview-item strong{
+  display:block;
+  margin-bottom:7px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+.rule span,.planning-item span,.planning-preview-item span{color:var(--text);font-weight:700}
+.planning-note{margin-top:14px}
+.quick-actions{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+.ranking-cta-button{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  min-height:124px;
+  padding:24px;
+  overflow:hidden;
+  color:var(--text);
+  text-decoration:none;
+  border-radius:6px 28px 6px 28px;
+  border:1px solid rgba(255,176,0,.34);
+  background:
+    radial-gradient(circle at top left,rgba(255,176,0,.26),transparent 40%),
+    linear-gradient(135deg,rgba(255,61,0,.18),rgba(140,82,255,.08));
+  box-shadow:0 18px 48px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.ranking-cta-button:before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:5px;
+  background:linear-gradient(var(--blue),var(--blue2));
+}
+.ranking-cta-button:hover{transform:translateY(-3px);box-shadow:0 24px 60px rgba(255,61,0,.18)}
+.ranking-cta-left{display:flex;align-items:center;gap:18px}
+.ranking-cta-icon{
+  display:grid;
+  place-items:center;
+  min-width:60px;
+  height:60px;
+  border-radius:8px 18px 8px 18px;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:#100905;
+  font-size:31px;
+  box-shadow:0 0 28px rgba(255,176,0,.34);
+}
+.ranking-cta-text small{
+  display:block;
+  color:var(--blue);
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-weight:950;
+  margin-bottom:6px;
+}
+.ranking-cta-text strong{
+  display:block;
+  color:#fff;
+  font-size:clamp(22px,3.4vw,34px);
+  text-transform:uppercase;
+  line-height:1;
+}
+.ranking-cta-text span{display:block;color:var(--muted);font-size:14px;margin-top:8px}
+.ranking-cta-arrow{
+  display:grid;
+  place-items:center;
+  min-width:52px;
+  height:52px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.20);
+  background:rgba(255,255,255,.06);
+  color:var(--blue);
+  font-size:30px;
+  font-weight:950;
+}
+.controller-cta{border-color:rgba(25,242,143,.35);background:radial-gradient(circle at top left,rgba(25,242,143,.17),transparent 42%),linear-gradient(135deg,rgba(255,61,0,.10),rgba(0,0,0,.18))}
+.controller-cta .ranking-cta-icon{background:linear-gradient(135deg,var(--success),#01b8ff)}
+.discord-cta{border-color:rgba(88,101,242,.48);background:radial-gradient(circle at top left,rgba(88,101,242,.25),transparent 42%),linear-gradient(135deg,rgba(255,61,0,.08),rgba(0,0,0,.18))}
+.discord-cta .ranking-cta-icon{background:var(--discord);color:#fff}
+.player-kills{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.player-kill{padding:12px}
+.totalbox{border-color:rgba(255,176,0,.34);background:rgba(255,176,0,.08);font-weight:950;color:var(--blue)}
+.live-dot{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  background:var(--success);
+  border-radius:99px;
+  box-shadow:0 0 16px var(--success);
+  margin-right:8px;
+  animation:pulse 1.2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:.45;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+/* Controller diagnostic */
+.sticks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.stick-zone{
+  width:280px;
+  height:280px;
+  max-width:100%;
+  aspect-ratio:1/1;
+  margin:20px auto;
+  border-radius:50%;
+  position:relative;
+  overflow:hidden;
+  border:2px solid rgba(255,176,0,.44);
+  background:
+    radial-gradient(circle,rgba(255,176,0,.15),transparent 56%),
+    repeating-radial-gradient(circle,rgba(255,255,255,.06) 0 1px,transparent 1px 45px),
+    #08060d;
+  box-shadow:inset 0 0 32px rgba(0,0,0,.55),0 0 30px rgba(255,176,0,.12);
+}
+.axis-line-x,.axis-line-y{position:absolute;background:rgba(255,255,255,.16)}
+.axis-line-x{width:100%;height:1px;top:50%;left:0}
+.axis-line-y{width:1px;height:100%;top:0;left:50%}
+.deadzone-circle{position:absolute;border:1px dashed rgba(255,255,255,.35);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.dot{width:22px;height:22px;border-radius:50%;background:var(--blue);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 18px rgba(255,176,0,1)}
+.dot.right{background:var(--success);box-shadow:0 0 18px rgba(25,242,143,1)}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.value{padding:14px;border-radius:4px 14px 4px 14px}
+.result-box{font-weight:900;line-height:1.4}
+@media(max-width:1050px){.dashboard{grid-template-columns:1fr}.grid-4,.planning-grid,.planning-preview-grid{grid-template-columns:repeat(2,1fr)}.sticks-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+  header{padding:20px 4%}
+  .brand h1,h1{font-size:clamp(29px,11vw,44px)}
+  main,.page-layout,.app{width:min(94%,100%);margin:22px auto 60px}
+  .panel,.app{padding:20px}
+  .grid-2,.grid-3,.grid-4,.rules,.planning-grid,.planning-preview-grid,.player-kills,.quick-actions,.stats-row,.values{grid-template-columns:1fr}
+  table{font-size:13px}
+  th,td{padding:10px}
+  .ranking-cta-button{align-items:flex-start;flex-direction:column}
+  .ranking-cta-arrow{align-self:flex-end}
+  .chat-msg{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
-<header><div class="header-row"><div class="brand"><small id="eventMode">Tournoi public Warzone Resurgence</small><h1>Silent Legion <span>Kill Race Tournament</span></h1></div><div class="top-actions"><div class="badge" id="eventBadge">Chargement</div></div></div></header>
+<header><div class="header-row"><div class="brand"><small id="eventMode">Tournoi public Warzone Resurgence</small><h1>Silent Legion <span>Kill Race Tournament</span></h1></div><div class="top-actions"><a class="linkbtn" href="https://discord.gg/silent-legion-962498029070483456" target="_blank" rel="noopener">Discord</a><div class="badge" id="eventBadge">Chargement</div></div></div></header>
 <div class="page-layout">
 <main>
-<section class="quick-actions" aria-label="Raccourcis du tournoi"><a class="ranking-cta-button" href="warzone-killrace-classement.html" aria-label="Accéder au classement public"><div class="ranking-cta-left"><div class="ranking-cta-icon">🏆</div><div class="ranking-cta-text"><small>Live leaderboard</small><strong>Classement en direct</strong><span>Voir le classement des équipes et le Top Killers</span></div></div><div class="ranking-cta-arrow">›</div></a><a class="ranking-cta-button controller-cta" href="sl-controller-diagnostic-tool.html" target="_blank" rel="noopener" aria-label="Ouvrir le test de manette Silent Legion"><div class="ranking-cta-left"><div class="ranking-cta-icon">🎮</div><div class="ranking-cta-text"><small>Option joueurs</small><strong>Test manette</strong><span>Vérifier le drift des joysticks avant le tournoi</span></div></div><div class="ranking-cta-arrow">›</div></a></section>
-<section class="panel"><h2>Règles rapides</h2><p class="help">Inscris ton équipe de 4 joueurs. Le code privé est généré côté serveur pour éviter les faux codes. Garde-le précieusement : il sert à déposer les screenshots.</p><div class="rules"><div class="rule"><strong>Mode</strong><span id="ruleMode">Warzone Resurgence public</span></div><div class="rule"><strong>Format</strong><span>Kill Race</span></div><div class="rule"><strong>Roster</strong><span>4 joueurs par équipe</span></div></div><div id="publicStatus" class="status">Connexion au serveur...</div></section>
-<section class="panel"><h2>Inscrire une équipe</h2><form id="registerForm"><div class="grid-2"><div><label>Nom de l'équipe *</label><input id="teamName" required></div><div><label>Capitaine *</label><input id="captainName" required></div><div><label>Discord / contact *</label><input id="contact" required></div><div><label>Plateforme</label><input id="platform" placeholder="Battle.net, PSN, Xbox..."></div></div><div class="grid-4" style="margin-top:14px"><div><label>Joueur 1 *</label><input id="p1" required></div><div><label>Joueur 2 *</label><input id="p2" required></div><div><label>Joueur 3 *</label><input id="p3" required></div><div><label>Joueur 4 *</label><input id="p4" required></div></div><div style="margin-top:14px"><label>Note</label><textarea id="note" maxlength="500" placeholder="Optionnel : dispo, remplaçant, info utile..."></textarea></div><div class="actions"><button id="registerBtn" type="submit">Valider l'inscription</button><button class="secondary" type="button" onclick="loadPublic()">Actualiser</button></div><div id="registerStatus" class="status">Connexion au serveur...</div></form></section>
-<section class="panel"><h2>Espace équipe - dépôt des screens</h2><p class="help">Entre le code privé reçu après l'inscription. L'API vérifie le code côté serveur : l'équipe et le nom ne sont plus envoyés par le navigateur.</p><div class="grid-2"><div><label>Code équipe</label><input id="teamCode" placeholder="Ex : KR-AB12CD"></div><div style="display:flex;align-items:end"><button id="loginBtn" onclick="loginTeam()" style="width:100%">Accéder</button></div></div><div id="teamSpace" style="display:none;margin-top:18px"><div class="status ok">Connecté : <strong id="spaceTeamName"></strong></div><form id="screenForm"><div class="grid-2" style="margin-top:14px"><div><label>Game n°</label><input id="gameNumber" type="number" min="1" value="1" required></div><div><label>Kills par joueur</label><div id="playerKillsFields" class="player-kills"><div class="status warning">Connecte l'équipe pour afficher les joueurs.</div></div><div id="killTotalBox" class="totalbox">Total kills équipe : 0</div></div><div><label>Placement</label><input id="placement" type="number" min="1" max="99" value="1" required></div><div><label>Screen Top / Placement * <small>(max 6 Mo)</small></label><input id="screenshotTop" type="file" accept="image/png,image/jpeg,image/webp" required><label style="margin-top:12px">Screen Scoreboard / Kills * <small>(max 6 Mo)</small></label><input id="screenshotScoreboard" type="file" accept="image/png,image/jpeg,image/webp" required></div></div><div style="margin-top:14px"><label>Commentaire</label><textarea id="screenNote" maxlength="500" placeholder="Ex : game 2, record, bug lobby..."></textarea></div><div class="actions"><button id="screenBtn" type="submit">Envoyer les screens</button></div><div id="screenStatus" class="status">Aucun envoi pour le moment.</div></form><div id="mySubmissions"></div></div></section>
+<section class="quick-actions" aria-label="Raccourcis du tournoi"><a class="ranking-cta-button" href="warzone-killrace-classement.html" aria-label="Accéder au classement public"><div class="ranking-cta-left"><div class="ranking-cta-icon">🏆</div><div class="ranking-cta-text"><small>Live leaderboard</small><strong>Classement en direct</strong><span>Voir le classement des équipes et le Top Killers</span></div></div><div class="ranking-cta-arrow">›</div></a><a class="ranking-cta-button controller-cta" href="sl-controller-diagnostic-tool.html" target="_blank" rel="noopener" aria-label="Ouvrir le test de manette Silent Legion"><div class="ranking-cta-left"><div class="ranking-cta-icon">🎮</div><div class="ranking-cta-text"><small>Option joueurs</small><strong>Test manette</strong><span>Vérifier le drift des joysticks avant le tournoi</span></div></div><div class="ranking-cta-arrow">›</div></a><a class="ranking-cta-button discord-cta" href="https://discord.gg/silent-legion-962498029070483456" target="_blank" rel="noopener" aria-label="Rejoindre le Discord Silent Legion"><div class="ranking-cta-left"><div class="ranking-cta-icon">💬</div><div class="ranking-cta-text"><small>Communauté</small><strong>Discord</strong><span>Rejoindre le serveur Silent Legion</span></div></div><div class="ranking-cta-arrow">›</div></a></section>
+<section class="panel"><h2>Planning officiel</h2><p class="help">Les horaires affichés ici sont la référence du tournoi. Pas besoin de chercher le message dans Discord : cette page est mise à jour par les admins.</p><div id="planningGrid" class="planning-grid"><div class="empty">Chargement du planning...</div></div><div id="planningNote" class="status planning-note" style="display:none"></div></section>
+<section class="panel"><h2>Comment participer</h2><p class="help">Le tournoi est limité à <strong id="maxTeamsText">16 équipes</strong>. Suis les étapes dans l’ordre pour éviter les erreurs pendant la Kill Race.</p><div class="rules"><div class="rule"><strong>1. Inscription</strong><span>Remplis ton équipe au format <span id="participationRoster">Quatuor : 4 joueurs</span>.</span></div><div class="rule"><strong>2. Code privé</strong><span>Copie et garde le code généré après validation.</span></div><div class="rule"><strong>3. Dépôt screens</strong><span>Entre ton code dans l’espace équipe puis envoie Top + Scoreboard.</span></div><div class="rule"><strong>4. Validation</strong><span>Un admin valide les screens avant le classement.</span></div><div class="rule"><strong>5. Classement live</strong><span>Le score et le Top Killers se mettent à jour après validation.</span></div><div class="rule"><strong>6. Remplacement</strong><span>Pour changer un joueur, contacte un admin. Ne refais pas l’inscription.</span></div></div></section>
+<section class="panel"><h2>Règles rapides</h2><p class="help">Inscris ton équipe au format choisi par les admins. Le code privé est généré côté serveur pour éviter les faux codes. Garde-le précieusement : il sert à déposer les screenshots.</p><div class="rules"><div class="rule"><strong>Mode</strong><span id="ruleMode">Warzone Resurgence public</span></div><div class="rule"><strong>Format</strong><span>Kill Race</span></div><div class="rule"><strong>Roster</strong><span id="ruleRoster">Quatuor : 4 joueurs par équipe</span></div><div class="rule"><strong>Places</strong><span id="ruleSlots">16 places max</span></div></div><div id="publicStatus" class="status">Connexion au serveur...</div></section>
+<section class="panel"><h2>Inscrire une équipe</h2><form id="registerForm"><div class="grid-2"><div><label>Nom de l'équipe *</label><input id="teamName" required></div><div><label>Capitaine *</label><input id="captainName" required></div><div><label>Discord / contact *</label><input id="contact" required></div><div><label>Plateforme</label><input id="platform" placeholder="Battle.net, PSN, Xbox..."></div></div><div id="registrationPlayers" class="grid-4" style="margin-top:14px"><div><label>Joueur 1 *</label><input class="registrationPlayerInput" id="p1" required></div><div><label>Joueur 2 *</label><input class="registrationPlayerInput" id="p2" required></div><div><label>Joueur 3 *</label><input class="registrationPlayerInput" id="p3" required></div><div><label>Joueur 4 *</label><input class="registrationPlayerInput" id="p4" required></div></div><div style="margin-top:14px"><label>Note</label><textarea id="note" maxlength="500" placeholder="Optionnel : dispo, remplaçant, info utile..."></textarea></div><div class="actions"><button id="registerBtn" type="submit">Valider l'inscription</button><button class="secondary" type="button" onclick="loadPublic()">Actualiser</button></div><div id="registerStatus" class="status">Connexion au serveur...</div></form></section>
+<section class="panel"><h2>Espace équipe - dépôt des screens</h2><div class="rules" style="margin-bottom:18px"><div class="rule"><strong>1. Entre ton code</strong><span>Utilise le code reçu après l'inscription pour accéder à ton équipe.</span></div><div class="rule"><strong>2. Choisis la bonne manche</strong><span>Fais un dépôt séparé pour chaque game retenue. Exemple : 3 games retenues = 3 envois.</span></div><div class="rule"><strong>3. Ajoute les résultats</strong><span>Indique le numéro de game, les kills par joueur et le placement de l'équipe.</span></div><div class="rule"><strong>4. Envoie les preuves</strong><span>Ajoute les 2 captures demandées pour cette game. Le classement sera mis à jour après validation des admins.</span></div></div><div class="status warning">Ne partage pas ton code hors de ton équipe. Si ton code ne fonctionne pas, contacte un admin et ne refais pas une inscription.</div><div class="status" style="margin-top:12px">Exemple simple : si le tournoi garde <strong id="retainedGamesExample">3 meilleures games</strong>, tu dois envoyer <strong id="retainedGamesExampleCount">3 dépôts</strong> au total : <strong>1re manche envoyée</strong>, <strong>2e manche envoyée</strong> et <strong>3e manche envoyée</strong>.</div><div class="grid-2" style="margin-top:14px"><div><label>Code équipe</label><input id="teamCode" placeholder="Ex : KR-AB12CD"></div><div style="display:flex;align-items:end"><button id="loginBtn" onclick="loginTeam()" style="width:100%">Accéder</button></div></div><div id="teamSpace" style="display:none;margin-top:18px"><div class="status ok">Connecté : <strong id="spaceTeamName"></strong></div><div class="status warning">Besoin de remplacer un joueur ? Contacte un admin avec ton nom d’équipe et ton code. Ne refais pas une inscription.</div><form id="screenForm"><div class="grid-2" style="margin-top:14px"><div><label>Game n°</label><input id="gameNumber" type="number" min="1" value="1" required></div><div><label>Kills par joueur</label><div id="playerKillsFields" class="player-kills"><div class="status warning">Connecte l'équipe pour afficher les joueurs.</div></div><div id="killTotalBox" class="totalbox">Total kills équipe : 0</div></div><div><label>Placement</label><input id="placement" type="number" min="1" max="99" value="1" required></div><div><label>Screen Top / Placement * <small>(max 6 Mo)</small></label><input id="screenshotTop" type="file" accept="image/png,image/jpeg,image/webp" required><label style="margin-top:12px">Screen Scoreboard / Kills * <small>(max 6 Mo)</small></label><input id="screenshotScoreboard" type="file" accept="image/png,image/jpeg,image/webp" required></div></div><div style="margin-top:14px"><label>Commentaire</label><textarea id="screenNote" maxlength="500" placeholder="Ex : game 2, record, bug lobby..."></textarea></div><div class="actions"><button id="screenBtn" type="submit">Envoyer les screens</button></div><div id="screenStatus" class="status">Aucun envoi pour le moment.</div></form><div id="mySubmissions"></div></div></section>
 </main>
 </div>
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbyHuwrkiKEAZHOO7JkQspXsV3XFkrjcvHmoVXpYWOGKKbSvPC2lRq3QPXP-p6DkEa_rqQ/exec";
+const DISCORD_URL="https://discord.gg/silent-legion-962498029070483456";
 const MAX_FILE_BYTES=6*1024*1024;
 const OPTIMIZE_IF_OVER_BYTES=900*1024;
 const OPTIMIZED_IMAGE_MAX_SIDE=2200;
 const OPTIMIZED_IMAGE_QUALITY=.86;
 const PUBLIC_CACHE_MS=15000;
-let publicState={event:{name:"Silent Legion Kill Race",status:"Chargement",mode:"Warzone Resurgence public"},stats:{teams:0}};
+let publicState={event:{name:"Silent Legion Kill Race",status:"Chargement",mode:"Warzone Resurgence public",planning:{}},stats:{teams:0,maxTeams:16,remainingTeamSlots:16,registrationFull:false,teamSize:4,teamFormat:"Quatuor",bestGames:3}};
 let teamState=null;
 let currentCode="";
+let editingSubmissionId="";
 let publicLoadedAt=0;
 let loadingPublic=false;
 const $=id=>document.getElementById(id);
 function esc(v){return String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function setBox(id,msg,type=""){const e=$(id);if(!e)return;e.className="status "+type;e.innerHTML=msg}
+const TEAM_FORMAT_LABELS={1:"Solo",2:"Duo",3:"Trio",4:"Quatuor"};
+function teamSize(){const s=publicState.stats||{};return Math.max(1,Math.min(4,Number(s.teamSize)||4))}
+function teamFormatLabel(n=teamSize()){return (publicState.stats&&publicState.stats.teamFormat)||TEAM_FORMAT_LABELS[n]||"Quatuor"}
+
+function retainedGamesCount(){const s=publicState.stats||{};return Math.max(1,Number(s.bestGames)||3)}
+function retainedGamesLabel(n=retainedGamesCount()){return n>1?`${n} meilleures games`:`${n} meilleure game`}
+function playerCountText(n=teamSize()){return n+" joueur"+(n>1?"s":"")}
+function renderRegistrationPlayers(){const box=$("registrationPlayers");if(!box)return;const n=teamSize();const oldValues=[...document.querySelectorAll(".registrationPlayerInput")].map(input=>input.value);box.innerHTML=Array.from({length:n},(_,i)=>`<div><label>Joueur ${i+1} *</label><input class="registrationPlayerInput" id="p${i+1}" value="${esc(oldValues[i]||"")}" required></div>`).join("")}
+function collectRegistrationPlayers(){return [...document.querySelectorAll(".registrationPlayerInput")].map(input=>input.value.trim()).filter(Boolean)}
+
+
+const PLANNING_LABELS=[
+  ["date","Date du tournoi"],
+  ["registrationOpen","Ouverture inscriptions"],
+  ["registrationClose","Fermeture inscriptions"],
+  ["tournamentStart","Début tournoi"],
+  ["tournamentEnd","Fin tournoi"],
+  ["submissionsClose","Limite dépôt screens"],
+  ["finalResults","Classement final"]
+];
+function planning(){return (publicState.event&&publicState.event.planning)||{}}
+function formatDateFR(value){if(!value)return "";const m=String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}/${m[2]}/${m[1]}`:value}
+function planningValue(key,value){if(!value)return "";return key==="date"?formatDateFR(value):value}
+function renderPlanning(){const p=planning();const grid=$("planningGrid");if(!grid)return;const rows=PLANNING_LABELS.map(([key,label])=>({key,label,value:planningValue(key,p[key])})).filter(x=>x.value);grid.innerHTML=rows.length?rows.map(x=>`<div class="planning-item"><strong>${esc(x.label)}</strong><span>${esc(x.value)}</span></div>`).join(""):`<div class="empty">Planning pas encore renseigné par les admins.</div>`;const note=$("planningNote");if(note){if(p.note){note.style.display="block";note.innerHTML=esc(p.note)}else{note.style.display="none";note.innerHTML=""}}}
 function nextFrame(){return new Promise(resolve=>requestAnimationFrame(()=>resolve()))}
 function setBtnLoading(btn,loading,label){if(!btn)return;if(loading){if(!btn.dataset.normalText)btn.dataset.normalText=btn.textContent;btn.textContent=label||"Chargement...";btn.classList.add("loading");btn.disabled=true}else{btn.classList.remove("loading");btn.textContent=btn.dataset.normalText||btn.textContent;delete btn.dataset.normalText;btn.disabled=false}}
 function timeoutFetch(url,options={},timeout=60000){const controller=new AbortController();const id=setTimeout(()=>controller.abort(),timeout);return fetch(url,{...options,signal:controller.signal}).finally(()=>clearTimeout(id))}
 async function getPublic(force=false){const fresh=Date.now()-publicLoadedAt<PUBLIC_CACHE_MS;if(!force&&publicState.updatedAt&&fresh)return publicState;const res=await timeoutFetch(API_URL+"?action=getPublicState&t="+Date.now(),{cache:"no-store"},30000);const data=await res.json();if(!data.ok)throw new Error(data.error||"Erreur API");publicState=data.publicState||publicState;publicLoadedAt=Date.now();return publicState}
 async function postApi(action,payload={}){const res=await timeoutFetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,payload})},90000);const text=await res.text();let data;try{data=JSON.parse(text)}catch(e){throw new Error("Réponse Google Script invalide : "+text.slice(0,120))}if(!data.ok)throw new Error(data.error||"Erreur API");return data}
-async function loadPublic(force=true){if(loadingPublic)return;loadingPublic=true;try{setBox("publicStatus","Actualisation...","warning");publicState=await getPublic(force);renderPublic();setBox("publicStatus","Connexion OK. Statut : <strong>"+esc(publicState.event.status)+"</strong>. Équipes inscrites : "+esc(publicState.stats.teams),"ok");setBox("registerStatus",publicState.event.status==="Inscriptions ouvertes"?"Inscriptions ouvertes.":"Les inscriptions sont actuellement fermées.",publicState.event.status==="Inscriptions ouvertes"?"ok":"warning")}catch(e){setBox("publicStatus","Erreur connexion : "+esc(e.message),"error");setBox("registerStatus","Erreur connexion : "+esc(e.message),"error")}finally{loadingPublic=false}}
-function renderPublic(){const ev=publicState.event||{};$("eventBadge").textContent=ev.status||"LIVE";$("eventMode").textContent=ev.mode||"Tournoi public Warzone Resurgence";$("ruleMode").textContent=ev.mode||"Warzone Resurgence public";const registerBtn=$("registerBtn");const screenBtn=$("screenBtn");if(registerBtn&&!registerBtn.classList.contains("loading"))registerBtn.disabled=ev.status!=="Inscriptions ouvertes";if(screenBtn&&!screenBtn.classList.contains("loading"))screenBtn.disabled=!["Inscriptions ouvertes","Tournoi lancé"].includes(ev.status||"")}
-$("registerForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("registerBtn");setBtnLoading(btn,true,"Inscription...");setBox("registerStatus","Inscription en cours, ne ferme pas la page...","warning");await nextFrame();try{if(publicState.event&&publicState.event.status&&publicState.event.status!=="Chargement"&&publicState.event.status!=="Inscriptions ouvertes")throw new Error("Les inscriptions sont fermées.");const players=[$("p1").value.trim(),$("p2").value.trim(),$("p3").value.trim(),$("p4").value.trim()];const data=await postApi("registerTeam",{name:$("teamName").value.trim(),captain:$("captainName").value.trim(),contact:$("contact").value.trim(),platform:$("platform").value.trim(),players,note:$("note").value.trim()});teamState=data.teamState||null;publicState=data.publicState||publicState;publicLoadedAt=Date.now();currentCode=data.teamCode||teamState?.team?.code||"";$("registerForm").reset();setBox("registerStatus",`Inscription validée !<br>Code privé équipe : <span class="codebox">${esc(currentCode)}</span><br>Garde ce code pour déposer tes screens.`,"ok");if(currentCode){$("teamCode").value=currentCode;renderTeamState();}}catch(err){setBox("registerStatus","Erreur : "+esc(err.name==="AbortError"?"Temps de réponse trop long. Réessaie.":err.message),"error")}finally{setBtnLoading(btn,false);renderPublic()}});
+async function loadPublic(force=true){if(loadingPublic)return;loadingPublic=true;try{setBox("publicStatus","Actualisation...","warning");publicState=await getPublic(force);renderPublic();const st=publicState.stats||{};const max=Number(st.maxTeams)||16;const slots=Math.max(0,Number(st.remainingTeamSlots ?? (max-(Number(st.teams)||0))));const full=!!st.registrationFull||slots<=0;setBox("publicStatus","Connexion OK. Statut : <strong>"+esc(publicState.event.status)+"</strong>. Équipes inscrites : "+esc(st.teams||0)+"/"+esc(max)+". Places restantes : "+esc(slots),full?"warning":"ok");setBox("registerStatus",publicState.event.status!=="Inscriptions ouvertes"?"Les inscriptions sont actuellement fermées.":full?"Tournoi complet : limite de "+max+" équipes atteinte.":"Inscriptions ouvertes. Places restantes : "+slots,publicState.event.status==="Inscriptions ouvertes"&&!full?"ok":"warning")}catch(e){setBox("publicStatus","Erreur connexion : "+esc(e.message),"error");setBox("registerStatus","Erreur connexion : "+esc(e.message),"error")}finally{loadingPublic=false}}
+function renderPublic(){const ev=publicState.event||{};const st=publicState.stats||{};const max=Number(st.maxTeams)||16;const teams=Number(st.teams)||0;const slots=Math.max(0,Number(st.remainingTeamSlots ?? (max-teams)));const full=!!st.registrationFull||slots<=0;const n=teamSize();const format=teamFormatLabel(n);$("eventBadge").textContent=(ev.status||"LIVE")+" • "+teams+"/"+max+" équipes • "+format;$("eventMode").textContent=ev.mode||"Tournoi public Warzone Resurgence";$("ruleMode").textContent=ev.mode||"Warzone Resurgence public";if($("ruleRoster"))$("ruleRoster").textContent=format+" : "+playerCountText(n)+" par équipe";if($("participationRoster"))$("participationRoster").textContent=format+" : "+playerCountText(n);if($("ruleSlots"))$("ruleSlots").textContent=slots>0?slots+" places restantes sur "+max:"Tournoi complet : "+max+"/"+max;if($("maxTeamsText"))$("maxTeamsText").textContent=max+" équipes";const best=retainedGamesCount();if($("retainedGamesText"))$("retainedGamesText").textContent=retainedGamesLabel(best);if($("retainedGamesSendCount"))$("retainedGamesSendCount").textContent=`${best} envoi${best>1?"s":""} séparé${best>1?"s":""}`;if($("retainedGamesExample"))$("retainedGamesExample").textContent=retainedGamesLabel(best);if($("retainedGamesExampleCount"))$("retainedGamesExampleCount").textContent=`${best} dépôt${best>1?"s":""}`;renderPlanning();renderRegistrationPlayers();const registerBtn=$("registerBtn");const screenBtn=$("screenBtn");if(registerBtn&&!registerBtn.classList.contains("loading"))registerBtn.disabled=ev.status!=="Inscriptions ouvertes"||full;if(screenBtn&&!screenBtn.classList.contains("loading"))screenBtn.disabled=(ev.status||"")!=="Tournoi lancé"}
+$("registerForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("registerBtn");setBtnLoading(btn,true,"Inscription...");setBox("registerStatus","Inscription en cours, ne ferme pas la page...","warning");await nextFrame();try{if(publicState.event&&publicState.event.status&&publicState.event.status!=="Chargement"&&publicState.event.status!=="Inscriptions ouvertes")throw new Error("Les inscriptions sont fermées.");const st=publicState.stats||{};const max=Number(st.maxTeams)||16;const slots=Math.max(0,Number(st.remainingTeamSlots ?? (max-(Number(st.teams)||0))));if((!!st.registrationFull||slots<=0)&&publicState.event.status!=="Chargement")throw new Error("Tournoi complet : limite de "+max+" équipes atteinte.");const n=teamSize();const players=collectRegistrationPlayers().slice(0,n);if(players.length!==n)throw new Error("Format "+teamFormatLabel(n)+" : remplis exactement "+playerCountText(n)+".");const data=await postApi("registerTeam",{name:$("teamName").value.trim(),captain:$("captainName").value.trim(),contact:$("contact").value.trim(),platform:$("platform").value.trim(),players,note:$("note").value.trim()});teamState=data.teamState||null;publicState=data.publicState||publicState;publicLoadedAt=Date.now();currentCode=data.teamCode||teamState?.team?.code||"";$("registerForm").reset();document.querySelectorAll(".registrationPlayerInput").forEach(input=>input.value="");setBox("registerStatus",`Inscription validée !<br>Code privé équipe : <span class="codebox" id="latestTeamCode">${esc(currentCode)}</span><br><button class="secondary" type="button" onclick="copyTeamCode()" style="margin-top:12px">Copier mon code</button><br>Garde ce code pour déposer tes screens.`,"ok");if(currentCode){$("teamCode").value=currentCode;renderTeamState();}}catch(err){setBox("registerStatus","Erreur : "+esc(err.name==="AbortError"?"Temps de réponse trop long. Réessaie.":err.message),"error")}finally{setBtnLoading(btn,false);renderPublic()}});
+function copyTeamCode(){const code=currentCode||$("teamCode")?.value||$("latestTeamCode")?.textContent||"";if(!code){setBox("registerStatus","Aucun code à copier.","warning");return}const okMsg=`Code copié : <span class="codebox">${esc(code)}</span>`;navigator.clipboard?.writeText(code).then(()=>setBox("registerStatus",okMsg,"ok")).catch(()=>{try{const tmp=document.createElement("input");tmp.value=code;document.body.appendChild(tmp);tmp.select();document.execCommand("copy");tmp.remove();setBox("registerStatus",okMsg,"ok")}catch(e){setBox("registerStatus",`Copie impossible. Code : <span class="codebox">${esc(code)}</span>`,"warning")}})}
 async function loginTeam(){const btn=$("loginBtn");setBtnLoading(btn,true,"Connexion...");setBox("screenStatus","Connexion à l'espace équipe...","warning");await nextFrame();try{const code=$("teamCode").value.trim().toUpperCase();if(!code)throw new Error("Entre ton code équipe.");const data=await postApi("getTeamState",{teamCode:code});teamState=data.teamState;currentCode=code;renderTeamState();setBox("screenStatus","Connecté. Tu peux déposer tes screens si les dépôts sont ouverts.","ok")}catch(e){setBox("screenStatus","Erreur : "+esc(e.message),"error")}finally{setBtnLoading(btn,false)}}
 function renderTeamState(){if(!teamState||!teamState.team)return;$("teamSpace").style.display="block";$("spaceTeamName").textContent=teamState.team.name;$("teamCode").value=teamState.team.code||currentCode;currentCode=teamState.team.code||currentCode;renderPlayerKillsInputs();renderMySubmissions();renderPublic()}
 function playerList(){return ((teamState&&teamState.team&&Array.isArray(teamState.team.players))?teamState.team.players:[]).filter(Boolean)}
@@ -54,8 +571,13 @@ function approxDataUrlBytes(dataUrl){const base64=String(dataUrl).split(",")[1]|
 function readFileAsDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
 function loadImage(dataUrl){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=dataUrl})}
 async function optimizeImage(file,label){validateFileType(file,label);if(file.size<=OPTIMIZE_IF_OVER_BYTES)return {dataUrl:await readFileAsDataURL(file),fileName:file.name};setBox("screenStatus","Optimisation de l'image : "+esc(label)+"...","warning");await nextFrame();try{const original=await readFileAsDataURL(file);const img=await loadImage(original);let w=img.naturalWidth||img.width;let h=img.naturalHeight||img.height;const scale=Math.min(1,OPTIMIZED_IMAGE_MAX_SIDE/Math.max(w,h));w=Math.max(1,Math.round(w*scale));h=Math.max(1,Math.round(h*scale));const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;const ctx=canvas.getContext("2d",{alpha:false});ctx.fillStyle="#000";ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);let dataUrl=canvas.toDataURL("image/jpeg",OPTIMIZED_IMAGE_QUALITY);if(approxDataUrlBytes(dataUrl)>MAX_FILE_BYTES)dataUrl=canvas.toDataURL("image/jpeg",.76);if(approxDataUrlBytes(dataUrl)>MAX_FILE_BYTES)throw new Error(label+" reste trop lourd après optimisation. Compresse le screen puis réessaie.");return {dataUrl,fileName:file.name.replace(/\.(png|jpg|jpeg|webp)$/i,"")+".jpg"}}catch(e){if(file.size>MAX_FILE_BYTES)throw e;return {dataUrl:await readFileAsDataURL(file),fileName:file.name}}}
-$("screenForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("screenBtn");setBtnLoading(btn,true,"Envoi...");setBox("screenStatus","Préparation des données...","warning");await nextFrame();try{if(!currentCode)throw new Error("Connecte-toi à ton espace équipe.");if(publicState.event&&publicState.event.status&&publicState.event.status!=="Chargement"&&!["Inscriptions ouvertes","Tournoi lancé"].includes(publicState.event.status))throw new Error("Les dépôts de screens sont fermés.");const fileTop=$("screenshotTop").files[0];const fileScoreboard=$("screenshotScoreboard").files[0];validateFileType(fileTop,"screen Top / Placement");validateFileType(fileScoreboard,"screen Scoreboard / Kills");const playerKills=collectPlayerKills();const totalKills=playerKills.reduce((a,p)=>a+(Number(p.kills)||0),0);if(!playerKills.length)throw new Error("Aucun joueur trouvé pour les kills.");if(totalKills>300)throw new Error("Total kills trop élevé. Vérifie les kills par joueur.");setBox("screenStatus","Préparation du screen Top / Placement...","warning");const top=await optimizeImage(fileTop,"screen Top / Placement");setBox("screenStatus","Préparation du Scoreboard / Kills...","warning");const scoreboard=await optimizeImage(fileScoreboard,"screen Scoreboard / Kills");setBox("screenStatus","Upload en cours vers le serveur...","warning");await nextFrame();const data=await postApi("submitScreen",{teamCode:currentCode,game:Number($("gameNumber").value),playerKills:playerKills,placement:Number($("placement").value),note:$("screenNote").value.trim(),fileDataTop:top.dataUrl,fileNameTop:top.fileName,fileDataScoreboard:scoreboard.dataUrl,fileNameScoreboard:scoreboard.fileName});teamState=data.teamState||teamState;$("screenForm").reset();$("gameNumber").value=1;$("placement").value=1;resetPlayerKills();setBox("screenStatus","Screens envoyés. En attente de validation admin.","ok");renderTeamState()}catch(err){setBox("screenStatus","Erreur : "+esc(err.name==="AbortError"?"Temps de réponse trop long. Réessaie avec des images plus légères.":err.message),"error")}finally{setBtnLoading(btn,false);renderPublic()}});
-function renderMySubmissions(){if(!teamState)return;const list=(teamState.submissions||[]).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));$("mySubmissions").innerHTML=list.length?`<h2 style="margin-top:20px">Mes envois</h2>`+list.map(s=>{const detail=formatPlayerKills(s.playerKills);return `<div class="submission"><strong>Game ${esc(s.game)}</strong> • ${esc(s.kills)} kills équipe • Top ${esc(s.placement)}<br>${detail?`<small>Kills joueurs : ${detail}</small><br>`:""}<small>Statut : ${s.status==="approved"?"Validé":s.status==="rejected"?"Refusé":"En attente"} • ${esc(s.createdAt)}</small>${s.note?`<br><small>Note : ${esc(s.note)}</small>`:""}</div>`}).join(""):""}
+$("screenForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("screenBtn");const isReplace=!!editingSubmissionId;setBtnLoading(btn,true,isReplace?"Remplacement...":"Envoi...");setBox("screenStatus","Préparation des données...","warning");await nextFrame();try{if(!currentCode)throw new Error("Connecte-toi à ton espace équipe.");if(!isReplace&&publicState.event&&publicState.event.status&&publicState.event.status!=="Chargement"&&publicState.event.status!=="Tournoi lancé")throw new Error("Les dépôts de screens sont fermés.");const fileTop=$("screenshotTop").files[0];const fileScoreboard=$("screenshotScoreboard").files[0];validateFileType(fileTop,"screen Top / Placement");validateFileType(fileScoreboard,"screen Scoreboard / Kills");const playerKills=collectPlayerKills();const totalKills=playerKills.reduce((a,p)=>a+(Number(p.kills)||0),0);if(!playerKills.length)throw new Error("Aucun joueur trouvé pour les kills.");if(totalKills>300)throw new Error("Total kills trop élevé. Vérifie les kills par joueur.");setBox("screenStatus","Préparation du screen Top / Placement...","warning");const top=await optimizeImage(fileTop,"screen Top / Placement");setBox("screenStatus","Préparation du Scoreboard / Kills...","warning");const scoreboard=await optimizeImage(fileScoreboard,"screen Scoreboard / Kills");setBox("screenStatus",isReplace?"Remplacement du dépôt en cours...":"Upload en cours vers le serveur...","warning");await nextFrame();const payload={teamCode:currentCode,game:Number($("gameNumber").value),playerKills:playerKills,placement:Number($("placement").value),note:$("screenNote").value.trim(),fileDataTop:top.dataUrl,fileNameTop:top.fileName,fileDataScoreboard:scoreboard.dataUrl,fileNameScoreboard:scoreboard.fileName};if(isReplace)payload.submissionId=editingSubmissionId;const data=await postApi(isReplace?"replaceSubmission":"submitScreen",payload);teamState=data.teamState||teamState;$("screenForm").reset();$("gameNumber").value=1;$("placement").value=1;editingSubmissionId="";if($("screenBtn"))$("screenBtn").textContent="Envoyer les screens";resetPlayerKills();setBox("screenStatus",isReplace?"Dépôt remplacé. En attente de validation admin.":"Screens envoyés. En attente de validation admin.","ok");renderTeamState()}catch(err){setBox("screenStatus","Erreur : "+esc(err.name==="AbortError"?"Temps de réponse trop long. Réessaie avec des images plus légères.":err.message),"error")}finally{setBtnLoading(btn,false);if(!editingSubmissionId&&$("screenBtn"))$("screenBtn").textContent="Envoyer les screens";renderPublic()}});
+function submissionStatusLabel(s){if(s.status==="approved")return "Validé";if(s.status==="rejected")return "Refusé";if(s.correctionOpen)return "Correction autorisée";if(s.correctionRequested)return "Correction demandée";return "En attente"}
+function canRequestCorrection(s){return s&&s.status!=="approved"&&!s.correctionRequested&&!s.correctionOpen}
+function canReplaceSubmission(s){return s&&s.status!=="approved"&&s.correctionOpen}
+async function requestCorrection(id){if(!currentCode){setBox("screenStatus","Connecte-toi à ton espace équipe.","error");return}const reason=prompt("Explique l'erreur à corriger pour ce dépôt :");if(reason===null)return;if(!reason.trim()){setBox("screenStatus","Demande annulée : raison obligatoire.","warning");return}try{const data=await postApi("requestCorrection",{teamCode:currentCode,submissionId:id,reason:reason.trim()});teamState=data.teamState||teamState;renderTeamState();setBox("screenStatus","Demande de correction envoyée. Un admin doit l'autoriser avant remplacement.","ok")}catch(e){setBox("screenStatus","Erreur : "+esc(e.message),"error")}}
+function startReplaceSubmission(id){const s=(teamState&&teamState.submissions||[]).find(x=>x.id===id);if(!s)return;editingSubmissionId=id;$("gameNumber").value=s.game||1;$("placement").value=s.placement||1;$("screenNote").value=s.note||"";renderPlayerKillsInputs();setTimeout(()=>{(s.playerKills||[]).forEach(p=>{const input=[...document.querySelectorAll(".playerKillInput")].find(i=>i.dataset.player===p.name);if(input)input.value=p.kills||0});updateKillTotal()},0);if($("screenBtn"))$("screenBtn").textContent="Remplacer ce dépôt";setBox("screenStatus","Mode correction activé : ajoute les deux nouveaux screens puis clique sur Remplacer ce dépôt.","warning");$("screenForm").scrollIntoView({behavior:"smooth",block:"center"})}
+function renderMySubmissions(){if(!teamState)return;const list=(teamState.submissions||[]).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));$("mySubmissions").innerHTML=list.length?`<h2 style="margin-top:20px">Mes envois</h2>`+list.map(s=>{const detail=formatPlayerKills(s.playerKills);const correction=s.correctionRequested||s.correctionOpen;return `<div class="submission"><strong>Game ${esc(s.game)}</strong> • ${esc(s.kills)} kills équipe • Top ${esc(s.placement)}<br>${detail?`<small>Kills joueurs : ${detail}</small><br>`:""}<small>Statut : ${submissionStatusLabel(s)} • ${esc(s.createdAt)}</small>${s.note?`<br><small>Note : ${esc(s.note)}</small>`:""}${correction?`<br><small>Correction : ${s.correctionOpen?"autorisée par un admin":"demande envoyée"}${s.correctionReason?` • Raison : ${esc(s.correctionReason)}`:""}</small>`:""}<div class="actions" style="margin-top:10px">${canRequestCorrection(s)?`<button class="secondary" type="button" onclick="requestCorrection('${esc(s.id)}')">Signaler une erreur</button>`:""}${canReplaceSubmission(s)?`<button type="button" onclick="startReplaceSubmission('${esc(s.id)}')">Remplacer ce dépôt</button>`:""}</div></div>`}).join(""):""}
 document.addEventListener("DOMContentLoaded",()=>{renderPublic();loadPublic(true)});
 </script>
 </body>
